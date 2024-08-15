@@ -731,10 +731,14 @@ class GenerateImageConfig:
         os.makedirs(self.output_folder, exist_ok=True)
         self.set_gen_time()
         # TODO save image gen header info for A1111 and us, our seeds probably wont match
-        image.save(self.get_image_path(count, max_count))
+        img_filepath = self.get_image_path(count, max_count)
+        image.save(img_filepath)
         # do prompt file
         if self.add_prompt_file:
             self.save_prompt_file(count, max_count)
+
+        return img_filepath 
+
 
     def save_prompt_file(self, count: int = 0, max_count=0):
         # save prompt file

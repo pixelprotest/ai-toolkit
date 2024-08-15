@@ -55,6 +55,7 @@ from transformers import CLIPTextModel, CLIPTokenizer, CLIPTextModelWithProjecti
 
 from toolkit.paths import ORIG_CONFIGS_ROOT, DIFFUSERS_CONFIGS_ROOT
 from toolkit.util.inverse_cfg import inverse_classifier_guidance
+from toolkit.telegram import send_image
 
 from optimum.quanto import freeze, qfloat8, quantize, QTensor, qint4
 
@@ -377,7 +378,7 @@ class StableDiffusion:
                     device=self.device_torch,
                     **load_args
                 ).to(self.device_torch)
-            
+
             if self.model_config.unet_sample_size is not None:
                 pipe.transformer.config.sample_size = self.model_config.unet_sample_size
             pipe.transformer = pipe.transformer.to(self.device_torch, dtype=dtype)
@@ -1217,7 +1218,10 @@ class StableDiffusion:
                             image=img.unsqueeze(0)
                         ).images[0]
 
-                    gen_config.save_image(img, i)
+                    img_filepath = gen_config.save_image(img, i)
+                    # send to telegram
+                    img_filename_no_ext = os.path.splitext(os.path.basename(img_filepath))[0]
+                    send_image(img_filepath, f'{img_filename_no_ext}')
 
                 if self.adapter is not None and isinstance(self.adapter, ReferenceAdapter):
                     self.adapter.clear_memory()

@@ -85,6 +85,9 @@ from the last checkpoint.
 
 IMPORTANT. If you press crtl+c while it is saving, it will likely corrupt that checkpoint. So wait until it is done saving
 
+## Telegram Training Updates
+In order to get training sample images sent to your telegram during training, make sure to add the two env keys  `TELEGRAM_LORA_BOT_TOKEN` and `TELEGRAM_LORA_CHAT_ID` to the `.env` in the root dir.
+
 ### Need help?
 
 Please do not open a bug report unless it is a bug in the code. You are welcome to [Join my Discord](https://discord.gg/SzVB3wYvxF)
